@@ -19,11 +19,6 @@ const Signup = () => {
 
   let from = location.state?.from?.pathname || "/home"
 
-  if(from){
-    console.log(from)
-  }
-
-  
   if(loading){
    return  <p className="absolute top-1/2 left-1/2 text-xl"><Loading /> </p>
   }
@@ -87,7 +82,7 @@ if(error){
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
             >
-               Log In
+               Sign Up
             </button>
         </form>
         <p className="mt-4 text-sm text-gray-600">

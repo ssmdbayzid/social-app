@@ -6,8 +6,12 @@ export const api = createApi({
   tagTypes: ["Media", "User"],
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }), // Replace with your API base URL
   endpoints: (builder) => ({
-    getMedia: builder.query({
+    getAllMedia: builder.query({
         query : () => "/media",
+        // providesTags: ["Media"]
+    }),
+    getMedia: builder.query({
+        query : (id) => `/media/${id}`,
         // providesTags: ["Media"]
     }),
     postMedia: builder.mutation({
@@ -37,4 +41,4 @@ export const api = createApi({
   }),
 });
 
-export const { useUpdateUserImageMutation, useUpdateUserEmailMutation, useGetMediaQuery, usePostMediaMutation } = api;
+export const { useUpdateUserImageMutation, useUpdateUserEmailMutation, useGetAllMediaQuery, useGetMediaQuery, usePostMediaMutation } = api;

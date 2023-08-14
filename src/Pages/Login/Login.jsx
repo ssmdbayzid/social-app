@@ -13,15 +13,10 @@ const LogIn = () => {
   const [signInWithEmailAndPassword, user, loading, error1] = useSignInWithEmailAndPassword(auth)
 
   // const [user3] = useAuthState(auth)
-
   const navigate = useNavigate()
   const location = useLocation()
 
   let from = location.state?.from?.pathname || "/home"
-
-  if(from){
-    console.log(from)
-  }
 
   
   if(loading){
@@ -31,7 +26,6 @@ const LogIn = () => {
   if(user){
     navigate(from, {replace: true})
   }
-  
 
   const handleLogIn = event => {
 
@@ -42,7 +36,7 @@ const LogIn = () => {
     const password = form.password.value;
 
      console.log(email, password)
-     signInWithEmailAndPassword(auth, email, password)
+     signInWithEmailAndPassword(email, password)
 
      
        let error;
@@ -84,7 +78,7 @@ const LogIn = () => {
         </form>
         <p className="mt-4 text-sm text-gray-600">
             'Don't have an account?
-            <a href='/sign-up'
+            <a href='/signup'
                 className="text-blue-500 ml-3 font-semibold cursor-pointer">
                 Sign Up
             </a>

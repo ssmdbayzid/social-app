@@ -1,14 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Loading from '../../component/Loading'
-import { useGetMediaQuery } from '../../services/api'
+import { useGetAllMediaQuery } from '../../services/api'
+import { useNavigate } from 'react-router-dom'
 
 const Media = () => {
-  
-  const {data, error, isLoading, isSucccess} = useGetMediaQuery()
+  const [isLike, setIsLike] = useState(false)
+  const {data, error, isLoading} = useGetAllMediaQuery()
+  const [likedItemId, setLikedItemId] = useState("")
+  const [items, setItems] = useState(data?.media);
 
-  if(data){
-      console.log(data)
+    const navigate = useNavigate()
+  const handleLikeClick = (itemId, isLike) => {
+    const updatedItems = items.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, loved: isLike };
+      }
+      return item;
+    });
+
+    setItems(updatedItems);
+
+    console.log(items)
   }
 
   if(isLoading){
@@ -19,61 +32,44 @@ const Media = () => {
     return <p>error.message</p>
   }
 
+    if(data){
+        console.log(data)
+    }
+ 
+const handleLoveClick = (isLike, id) => {
+    setIsLike(!isLike);
+    setLikedItemId(id); // Notify the parent component about the love action
+    handleLikeClick(id, !isLike)
+    console.log(isLike, id)
+};
+
   return (
     <div>
       Media
     
-<div className="h-screen grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div className="grid gap-4">
-        {data && data.media.map((item, index) => <div className="relative">          
+<div className="h-screen p-3 grid grid-cols-2 md:grid-cols-4 gap-4">
+
+        {data && data.media.map((item, index) => <div className="relative pb-20">          
             <img className="h-auto max-w-full rounded-lg" src={item.image} alt="img" />
-            <div className="absolute bg-green-600 top-0 left-0">
-              <h1>{item.name}</h1> 
+            <button onClick={()=> handleLoveClick(!isLike, item._id)} type="button" className="absolute top-3 right-3 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center mr-2 ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill={ isLike ? "red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke={isLike ? "red" : "white"} className="w-6 h-6 ">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+</svg>
+
+  <span className="sr-only">Icon description</span>
+</button>
+            <div className="relative px-3 text-sm w-full  bottom-12 left-0">
+           
+            <div className="flex justify-between  items-center">
+              <h1 className="text-white mr-2">{item.name}</h1> 
+              <button onClick={()=> navigate(`/mediaDetails/${item._id}`)} type="button" className="text-white border border-white hover:bg-slate-100     hover:text-black focus:ring-4 focus:outline-none  font-medium rounded-md  px-3 py-2 text-xs text-center  ">Purple</button>
+                </div>
             </div>
         </div>)}
 
-       
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg" alt="img" />
-        </div>
-    </div>
-    <div className="grid gap-4">
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="img" />
-        </div>
-    </div>
-    <div className="grid gap-4">
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="img" />
-        </div>
-    </div>
-    <div className="grid gap-4">
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="img" />
-        </div>
-        <div>
-            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="img" />
-        </div>
-    </div>
 </div>
+
+
 
     </div>
   )
