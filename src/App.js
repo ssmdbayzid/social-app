@@ -1,18 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './component/Header';
-import Footer from './component/Footer';
-import Home from './Pages/Home/Home';
+import Routers from "./Router/Routers";
+import Footer from "./component/Footer";
+import Header from "./component/Header";
+
+
 
 function App() {
   return (
-    <div >
+    <div className="pb-48" >
       <Header />
-      <h1 className="text-3xl">Task Projects</h1>
-      <main className="h-screen">
-        <Home />
-      </main>
-      <Footer />
+      <div className="">
+      <Routers className="h-full"/>
+      </div>
+      <Footer/>
     </div>
   );
 }

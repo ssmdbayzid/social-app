@@ -1,0 +1,6 @@
+export {default as Home} from "./Home/Home"
+export {default as Login} from "./Login/Login"
+export {default as Signup} from "./Signup/Signup"
+export {default as Media} from "./Media/Media"
+export {default as MediaDetails} from "./Media/MediaDetails"
+export {default as About} from "./About/About"
