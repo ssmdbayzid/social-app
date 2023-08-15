@@ -5,23 +5,22 @@ import { useGetAllMediaQuery } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 
 const Media = () => {
-  const [isLike, setIsLike] = useState(false)
   const {data, error, isLoading} = useGetAllMediaQuery()
-  const [likedItemId, setLikedItemId] = useState("")
-  const [items, setItems] = useState(data?.media);
+  const [items, setItems] = useState(null);
 
     const navigate = useNavigate()
-  const handleLikeClick = (itemId, isLike) => {
-    const updatedItems = items.map((item) => {
-      if (item.id === itemId) {
-        return { ...item, loved: isLike };
-      }
-      return item;
+
+    useEffect(()=>{
+      handleLikeClick()
+    },[])
+    
+  const handleLikeClick = () => {
+    const updatedItems = data?.media.map((item) => {
+      return {...item, isLiked: false};
     });
 
-    setItems(updatedItems);
+    setItems(updatedItems)    
 
-    console.log(items)
   }
 
   if(isLoading){
@@ -35,12 +34,22 @@ const Media = () => {
     if(data){
         console.log(data)
     }
+
+    if(items){
+      console.log(items)
+    }
  
 const handleLoveClick = (isLike, id) => {
-    setIsLike(!isLike);
-    setLikedItemId(id); // Notify the parent component about the love action
-    handleLikeClick(id, !isLike)
-    console.log(isLike, id)
+
+  // console.log(isLike, id)
+   const updatedItems = items.map((item) => {
+              if(item._id === id){
+                item.isLiked = isLike
+              }
+              return {...item}
+            });
+    setItems(updatedItems)
+  
 };
 
   return (
@@ -49,10 +58,10 @@ const handleLoveClick = (isLike, id) => {
     
 <div className="h-screen p-3 grid grid-cols-2 md:grid-cols-4 gap-4">
 
-        {data && data.media.map((item, index) => <div className="relative pb-20">          
+        {items && items.map((item, index) => <div className="relative pb-20">          
             <img className="h-auto max-w-full rounded-lg" src={item.image} alt="img" />
-            <button onClick={()=> handleLoveClick(!isLike, item._id)} type="button" className="absolute top-3 right-3 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center mr-2 ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill={ isLike ? "red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke={isLike ? "red" : "white"} className="w-6 h-6 ">
+            <button onClick={()=> handleLoveClick(!item.isLiked, item._id)} type="button" className="absolute top-3 right-3 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center mr-2 ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill={ item.isLiked ? "red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke={item.isLiked ? "red" : "white"} className="w-6 h-6 ">
   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
 </svg>
 

@@ -2,6 +2,10 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { usePostMediaMutation } from '../../services/api';
 import Loading from '../../component/Loading';
+import auth from '../../firebase.init';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
+import { isFulfilled } from '@reduxjs/toolkit';
 
 const 
 AddMedia = () => {
@@ -9,24 +13,27 @@ AddMedia = () => {
     const [name, setName] = useState('');
       const [mediaImage, setMediaImage] = useState(null);
 
+      const [user, loading] = useAuthState(auth)
 
+      const navigate = useNavigate()
 
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
-
+  if(isLoading ||loading ){
+    return <Loading/>
+  }
   const handleImageChange = (e) => {
     setMediaImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Here you can handle the form submission and image upload logic.
-    // You might want to use libraries like Axios to send the form data to your server.
- 
-  
 
+    if(!user){
+      return navigate("/login")
+    }
+    
   try {
     const formData = new FormData();
     formData.append('key', '15abb5d6d10c5792735d187ebb3d95b0'); // Replace with your ImgBB API key
@@ -35,7 +42,7 @@ AddMedia = () => {
     const response = await axios.post('https://api.imgbb.com/1/upload', formData);
     const image = response.data.data.url;
 
-    console.log('Image uploaded successfully. URL:', image);
+   
 
     if(image){
       const media = {
@@ -44,9 +51,11 @@ AddMedia = () => {
       }
       const newMedia = await postMedia(media)
 
-         if(newMedia){
-           console.log(result)
-         }
+        if(result?.status === "fulfilled"){
+          if(result){
+            console.log(newMedia)            
+          }
+        }
     }
     // You can add additional logic here, such as saving the media name and image URL to a database.
   } catch (error) {
