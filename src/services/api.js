@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const api = createApi({
   reducerPath: 'api',
-  tagTypes: ["Media", "User"],
+  tagTypes: ["Media", "User",],
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }), // Replace with your API base URL
   endpoints: (builder) => ({
     getAllMedia: builder.query({
@@ -17,6 +17,14 @@ export const api = createApi({
     postMedia: builder.mutation({
       query: (data) => ({
         url: '/media', // Replace with your API endpoint
+        method: 'POST',
+        body: data,
+        invalidatesTags: ["Media"]
+      }),
+    }),
+    postComment: builder.mutation({
+      query: ({id, ...data}) => ({
+        url: `/comments/${id}`, // Replace with your API endpoint
         method: 'POST',
         body: data,
         invalidatesTags: ["Media"]
@@ -41,4 +49,9 @@ export const api = createApi({
   }),
 });
 
-export const { useUpdateUserImageMutation, useUpdateUserEmailMutation, useGetAllMediaQuery, useGetMediaQuery, usePostMediaMutation } = api;
+export const { useUpdateUserImageMutation,
+   useUpdateUserEmailMutation,
+   useGetAllMediaQuery,
+   useGetMediaQuery,
+   usePostMediaMutation,
+  usePostCommentMutation } = api;

@@ -5,65 +5,52 @@ import { useGetAllMediaQuery } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 
 
-
+const initialState = [{
+  _id : "",
+  name: "",
+  image: ""
+}]
 const Media = () => {
 
   const {data, error, isLoading} = useGetAllMediaQuery()
- 
-  const [items, setItems] = useState([data && data?.media]);
+  
+  const [items, setItems] = useState(initialState);
 
   const navigate = useNavigate()
-  
-  
-  const handleLikeClick = () => {
-    const updatedItems = items.map((item) => {
 
-      return  {...item, isLiked: false};
-    });
 
-    setItems(updatedItems)    
-
-  }
   useEffect(()=>{
+    if(data){
+      setItems(data?.media)
+    }
+  },[data])
 
-    handleLikeClick()
-  
-  },[])
-
-  
   if(isLoading){
     return <Loading />
   }
   
-
-
  
   if(error){
     return <p>error.message</p>
   }
 
-    if(data){
-      // setItems(data.media)
-      console.log(data)
-    }
-
     if(items){
+      // setItems(data.media)
       console.log(items)
     }
- 
-const handleLoveClick = (isLike, id) => {
 
-  // console.log(isLike, id)
+
+const handleLoveClick = (liked, id) => {
+
    const updatedItems = items.map((item) => {
-              if(item._id === id){
-                item.isLiked = isLike
+              if(item._id === id){                
+               return {...item, isLiked: liked}
               }
-              return {...item}
+              return item
             });
-    console.log(updatedItems)
-    setItems(updatedItems)
-  
+            setItems(updatedItems);
 };
+
 
   return (
     <div>
@@ -71,7 +58,7 @@ const handleLoveClick = (isLike, id) => {
     
 <div className="h-screen p-3 grid grid-cols-2 md:grid-cols-4 gap-4">
 
-        {data && data.media.map((item, index) => <div className="relative pb-20">          
+        {items && items.map((item, index) => <div className="relative pb-20 min-w-md">          
             <img className="h-auto max-w-full rounded-lg" src={item.image} alt="img" />
             <button onClick={()=> handleLoveClick(!item.isLiked, item._id)} type="button" className="absolute top-3 right-3 font-medium rounded-lg text-sm p-1.5 text-center inline-flex items-center mr-2 ">
             <svg xmlns="http://www.w3.org/2000/svg" fill={ item.isLiked ? "red" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke={item.isLiked ? "red" : "white"} className="w-6 h-6 ">

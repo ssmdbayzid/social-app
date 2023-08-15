@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
-import { useGetMediaQuery } from '../../services/api'
+import { useGetMediaQuery, usePostCommentMutation } from '../../services/api'
 import Loading from '../../component/Loading'
 import { useParams } from 'react-router-dom'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import auth from '../../firebase.init'
+
 
 const MediaDetails = () => {
   const {id} = useParams()
   const {data, error, isLoading} = useGetMediaQuery(id)
+ const  [postComment, result, isLoading2] = usePostCommentMutation()
+
+  const [user, loading] = useAuthState(auth)
   const [newComment, setNewComment] = useState('');
 
     if(data){
@@ -15,17 +21,24 @@ const MediaDetails = () => {
       console.log(error)
     }
 
-    if(isLoading){
+    if(isLoading || isLoading2 || loading){
       return <Loading />
     }
 
+    if(user){
+      console.log(user.photoURL)
+    }
     // Comment 
     
       const handleCommentSubmit = () => {
-        // if (newComment.trim() !== '') {
-        //   onComment(newComment);
-        //   setNewComment('');
+
+        // const newComment = {
+        //   commenterName: 
+        //   commenterImage,
+        //   comment
         // }
+        
+        // console.log(newComment)
 
       };
 
