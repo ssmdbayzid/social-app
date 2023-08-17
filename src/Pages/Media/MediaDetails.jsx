@@ -1,46 +1,33 @@
-import React, { useState } from 'react'
-import { useGetMediaQuery, usePostCommentMutation } from '../../services/api'
+import React, { useEffect, useState } from 'react'
+import { useGetMediaQuery,  } from '../../services/api'
 import Loading from '../../component/Loading'
 import { useParams } from 'react-router-dom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import auth from '../../firebase.init'
+import CommentSection from './CommentSection'
 
 
 const MediaDetails = () => {
   const {id} = useParams()
   const {data, error, isLoading} = useGetMediaQuery(id)
- const  [postComment, result, isLoading2] = usePostCommentMutation()
 
   const [user, loading] = useAuthState(auth)
-  const [newComment, setNewComment] = useState('');
-
-    if(data){
-      console.log(data)      
-    }
+  
+useEffect(()=>{
+  
+},[data])
     if(error){
       console.log(error)
     }
 
-    if(isLoading || isLoading2 || loading){
+    if(isLoading || loading){
       return <Loading />
     }
 
     if(user){
       console.log(user.photoURL)
     }
-    // Comment 
-    
-      const handleCommentSubmit = () => {
 
-        // const newComment = {
-        //   commenterName: 
-        //   commenterImage,
-        //   comment
-        // }
-        
-        // console.log(newComment)
-
-      };
 
   return (
     <section className="text-gray-600 body-font overflow-hidden ">
@@ -65,50 +52,7 @@ const MediaDetails = () => {
     </div>
   
   {/* // Comment section */}
-    <div className="p-4 w-1/2 mx-auto">
-      <h3 className="text-lg font-semibold mb-2">Comments</h3>
-      <div className="mb-4">
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          className="border rounded-md p-2 w-full"
-          placeholder="Add a comment..."
-        />
-      </div>
-      <button
-        onClick={handleCommentSubmit}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-      >
-        Post Comment
-      </button>
-      {/* <div className="mt-4">
-        {comments.map((comment, index) => (
-          <p key={index} className="mb-2">
-            {comment}
-          </p>
-        ))}
-      </div> */}
-    </div>
-
-    <div className="mt-4 w-1/2 mx-auto">
-      <h3 className="text-lg font-semibold mb-2">Comments</h3>
-      {data.comments?.map((comment, index) => (
-        <div key={index} className="bg-white rounded-md p-4 mb-4 shadow-md">
-          <div className="flex items-center mb-2">
-            
-            <img
-              src={comment.commenterImage}
-              alt={comment.commenterName}
-              className="w-10 h-10 rounded-full mr-6"
-            />
-            <div>
-           <p className="font-semibold">{comment.commenterName}</p>
-          <p>{comment.comment}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div> 
+    <CommentSection data={data} user={user}  />
   </div>}
 
 

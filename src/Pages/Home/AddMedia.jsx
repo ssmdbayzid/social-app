@@ -51,10 +51,9 @@ AddMedia = () => {
       }
       const newMedia = await postMedia(media)
 
-        if(result?.status === "fulfilled"){
-          if(result){
-            console.log(newMedia)            
-          }
+        if(result?.isSucces == true){
+          return <p className="text-xl text-green-600">Add new item <b>{newMedia.name}</b> successfully</p>  
+                 
         }
     }
     // You can add additional logic here, such as saving the media name and image URL to a database.
