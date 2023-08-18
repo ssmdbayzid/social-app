@@ -66,9 +66,9 @@ const LogIn = () => {
   
   return (
     <>
-     <div className="min-h-screen bg-[url('https://wallpaperaccess.com/full/3275630.jpg')] bg-cover bg-center   flex items-center justify-center ">
-      <div className="w-full h-screen mt-10 flex flex-col justify-center items-center backdrop-blur-sm">
-    <div className="w-96 bg-white rounded-lg shadow-md p-8 transform hover:scale-105 transition-transform duration-300">
+     <div className="min-h-screen flex items-center justify-center ">
+      <div className="w-full h-screen flex flex-col justify-center items-center backdrop-blur-sm">
+    <div className="w-96 bg-white border shadow-lg shadow-[#ededed] rounded-lg p-8 transform hover:scale-105 transition-transform duration-300">
       <div className="h-16 bg-[url('https://plus.unsplash.com/premium_photo-1661376655396-5d527deab90b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=871&q=80')] bg-cover bg-center">
         <h2 className="text-4xl text-center text-secondary font-bold my-4 shadow-black">Log In</h2>
       </div>
